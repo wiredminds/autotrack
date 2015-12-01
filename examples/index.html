@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Autotrack example</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="../dist/wm_autotrack.min.js"></script>
+    </head>
+    <body>
+        <div>Autorack demo page</div>
+        <p>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+        </p>
+        <p>
+            <a href="dummy.doc" target="_blank">dummy.doc</a>
+        </p>
+        <!-- WiredMinds eMetrics tracking with LeadLab V6.4 START -->
+        <script type="text/javascript"><!--
+        var wiredminds = [];
+        wiredminds.push(["setTrackParam", "wm_custnum", "replaceme"]);
+        // Begin own parameters.
+        wiredminds.push(["setTrackParam", "wm_campaign_key", "utm_campaign"]);
+        // End own parameters.
+        wiredminds.push(["count"]); 
+        
+        (function() {
+                function wm_async_load() {
+                        var wm = document.createElement("script");
+                        wm.type = "text/javascript";
+                        wm.async = true;
+                        wm.src = "http://wm.wiredminds.de/track/count.js";
+                        var el = document.getElementsByTagName('script')[0];
+                        el.parentNode.insertBefore(wm, el);
+                }
+
+                if (window.addEventListener) {
+                        window.addEventListener('load', wm_async_load, false);
+                } else if (window.attachEvent){
+                        window.attachEvent('onload', wm_async_load);
+                }
+        })();
+        // -->
+        </script>
+        <!-- WiredMinds eMetrics tracking with LeadLab V6.4 END -->
+
+
+        <script>
+            var wmAutoTrackObj = new wmAutoTrack({
+                  trackDownlodsWithPath: false,
+                  debug: true
+            });
+            if (window.addEventListener) {
+                window.addEventListener('load', wmAutoTrackObj.init, false);
+            } else if (window.attachEvent) {
+                window.attachEvent('onload', wmAutoTrackObj.init);
+            }
+        </script>
+    </body>
+</html>

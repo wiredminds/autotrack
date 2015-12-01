@@ -1,0 +1,18 @@
+{
+  "name": "autotrack",
+  "description": "Javascript for automatic tracking of file download and external links for use with wiredminds",
+  "main": "gulpfile.js",
+  "authors": [
+    "wiredminds"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/wiredminds/autotrack",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
