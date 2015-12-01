@@ -4,7 +4,7 @@ This is a development preview, do not use in production!
 
 ## Tutorials & Documentation
 
-* [Read the full documentation!](docs/build/html/index.html)
+* [Read the full documentation!](docs/source/index.rst)
 
 ## License:
 
