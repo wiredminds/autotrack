@@ -20,7 +20,7 @@ Bite die wm_autotrack.min.js JavaScript Datei auf dem Webserver hochladen und im
 
 .. code-block:: html
 
-    <-- Make sure that the wiredminds tracking code is added to your page as well -->
+    <!-- Make sure that the wiredminds tracking code is added to your page as well -->
     <script type="text/javascript" src="../dist/wm_autotrack.min.js"></script>
 
     <script>
@@ -93,7 +93,7 @@ Optionen
     pathEventMailto: 'MailTo/',
 
     // milestone name: if empty string no milestone will be set
-    milestoneMailto: '',
+    milestoneMailto: '',ö
 
     // toggle console debug
     debug: false
