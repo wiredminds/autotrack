@@ -16,6 +16,18 @@ Voraussetzungen hierfür sind:
 Installation
 ------------
 
+Via Bower
+
+.. code-block:: bash
+
+  bower install wm_autotrack
+
+.. code-block:: html
+
+  <script type="text/javascript" src="bower_components/wm_autotrack/dist/wm_autotrack.min.js"></script>
+
+Manuell
+
 Bite die wm_autotrack.min.js JavaScript Datei auf dem Webserver hochladen und im auf jede Seite einbinden.
 
 .. code-block:: html

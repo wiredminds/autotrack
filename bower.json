@@ -1,6 +1,6 @@
 {
-  "name": "wm-autotrack",
-  "version": "11.0.0-rc.1",
+  "name": "wm_autotrack",
+  "version": "11.0.0-rc.2",
   "description": "Automatic tracking of file downloads and external links with wiredminds",
   "main": "dist/wm_autotrack.min.js",
   "authors": [

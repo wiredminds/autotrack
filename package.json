@@ -1,6 +1,6 @@
 {
   "name": "autotrack",
-  "version": "11.0.0-rc.1",
+  "version": "11.0.0-rc.2",
   "description": "Automatic tracking of file downloads and external links with wiredminds",
   "main": "gulpfile.js",
   "scripts": {
