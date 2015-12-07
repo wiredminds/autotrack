@@ -1,9 +1,12 @@
 {
-  "name": "autotrack",
-  "description": "Javascript for automatic tracking of file download and external links for use with wiredminds",
-  "main": "gulpfile.js",
+  "name": "wm-autotrack",
+  "version": "11.0.0-rc.1",
+  "description": "Automatic tracking of file downloads and external links with wiredminds",
+  "main": "dist/wm_autotrack.min.js",
   "authors": [
-    "wiredminds"
+    "wiredminds",
+    "tracking",
+    "analytics"
   ],
   "license": "MIT",
   "homepage": "https://github.com/wiredminds/autotrack",

@@ -270,7 +270,7 @@ var wmAutoTrack = function(options) {
   /**
    * Get domain from passed URL
    *
-   * @param	{string} strURL
+   * @param {string} strURL
    * @returns {string}
    */
   this.getDomain = function(strURL) {
