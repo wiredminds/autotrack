@@ -8,15 +8,26 @@ Automatisches Download Tracking
 
 Downloads (bspw. pdf, zip, doc Dateien) lassen sich daraufhin automatisch tracken ohne dass jeder Datei-Link manuell mit einem extra Tracking Code versehen werden muss.
 
-Voraussetzungen hierfür sind:
+**Voraussetzungen hierfür sind:**
 
+- das wiredminds Tracking Code ist auf der Seite eingebaut
 - die Dateien werden direkt verlinkt (nicht über eine Weiterleitung oder JavaScript)
-- die Dateien öffnen sich in einem neuen Fenster.
+- die Dateien öffnen sich in einem neuen Fenster
+
+**Funktionen des Skriptes:**
+
+- autom. Tracking von Dokumenten/Dateien
+- autom. Tracking von externen Links (Outbound Links)
+- autom. Tracking von "mailto" links (E-Mail Adressen)
 
 Installation
 ------------
 
-Via Bower
+1. wm_autotrack.min.js inkludieren
+2. Wiredminds tracking code einbauen
+3. Autotrack starten
+
+**Bower install**
 
 .. code-block:: bash
 
@@ -24,17 +35,32 @@ Via Bower
 
 .. code-block:: html
 
+  <!-- Make sure that the wiredminds tracking code is added to your page as well -->
   <script type="text/javascript" src="bower_components/wm_autotrack/dist/wm_autotrack.min.js"></script>
+  <script>
+      var wmAutoTrackObj = new wmAutoTrack({
+            // add options here
+            trackDownlodsWithPath: false
+      });
 
-Manuell
+      // no not modify below this line
+      // init autotrack
+      if (window.addEventListener) {
+          window.addEventListener('load', wmAutoTrackObj.init, false);
+      } else if (window.attachEvent) {
+          window.attachEvent('onload', wmAutoTrackObj.init);
+      }
+  </script>
 
-Bite die wm_autotrack.min.js JavaScript Datei auf dem Webserver hochladen und im auf jede Seite einbinden.
+**Manuell:**
+
+`wm_autotrack.min.js <https://raw.githubusercontent.com/wiredminds/autotrack/master/dist/wm_autotrack.min.js>`_
+Datei auf dem Webserver hochladen und im auf jede Seite einbinden.
 
 .. code-block:: html
 
     <!-- Make sure that the wiredminds tracking code is added to your page as well -->
     <script type="text/javascript" src="../dist/wm_autotrack.min.js"></script>
-
     <script>
         var wmAutoTrackObj = new wmAutoTrack({
               // add options here
@@ -49,12 +75,6 @@ Bite die wm_autotrack.min.js JavaScript Datei auf dem Webserver hochladen und im
             window.attachEvent('onload', wmAutoTrackObj.init);
         }
     </script>
-
-Funktionen des Skriptes:
-
-- autom. Tracking von Dokumenten/Dateien
-- autom. Tracking von externen Links (Outbound Links)
-- autom. Tracking von "mailto" links (E-Mail Adressen)
 
 Optionen
 --------
@@ -117,6 +137,7 @@ Es werden automatisch folgende Meilensteine gesetzt (kann in de JS Datei angepas
 
 - „Downloads“ - wenn eine Datei/Dokument angeklickt wird
 - „E-Mail Angeklickt“ - wenn eine E-Mail Adresse angeklickt wird
+
 
 Bitte testen Sie abschließend mit unterschiedlichen Browsern, ob das Tracking tatsächlich überall funktioniert.
 
