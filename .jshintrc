@@ -1,0 +1,8 @@
+{
+    "globals": {
+        "wiredminds": true,
+        "console": true,
+        "document": true,
+        "window": true
+    }
+}
