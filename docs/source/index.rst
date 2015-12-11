@@ -60,7 +60,7 @@ Datei auf dem Webserver hochladen und im auf jede Seite einbinden.
 .. code-block:: html
 
     <!-- Make sure that the wiredminds tracking code is added to your page as well -->
-    <script type="text/javascript" src="../dist/wm_autotrack.min.js"></script>
+    <script type="text/javascript" src="wm_autotrack.min.js"></script>
     <script>
         var wmAutoTrackObj = new wmAutoTrack({
               // add options here
