@@ -6,28 +6,25 @@
 Automatisches Download Tracking
 =====================================
 
-Downloads (bspw. pdf, zip, doc Dateien) lassen sich daraufhin automatisch tracken ohne dass jeder Datei-Link manuell mit einem extra Tracking Code versehen werden muss.
+Das Download Tracking Script für LeadLab Sales ermöglicht es Ihnen Dokumente oder
+Dateien mit bestimmten Endungen (wie zum Beispiel *.pdf *.doc, *.zip, *.exe und weitere) automatisiert zu erfassen.
+Weiterhin werden Links, die von Ihrer Website abgehen (Outbound Links) und „mail to“ - Verweise (E-Mail Adressen) automatisiert getrackt.
+Durch den Einsatz des Scripts wird vermieden, dass jedes der beschriebenen Elemente mit einer separaten wiredminds Codezeile erfasst werden muss.
 
-**Voraussetzungen hierfür sind:**
+**Voraussetzungen**
 
-- das wiredminds Tracking Code ist auf der Seite eingebaut
-- die Dateien werden direkt verlinkt (nicht über eine Weiterleitung oder JavaScript)
-- die Dateien öffnen sich in einem neuen Fenster
-
-**Funktionen des Skriptes:**
-
-- autom. Tracking von Dokumenten/Dateien
-- autom. Tracking von externen Links (Outbound Links)
-- autom. Tracking von "mailto" links (E-Mail Adressen)
+- der wiredminds Tracking Code ist auf der Seite der Webpräsenz eingebaut
+- die Dateien sind direkt verlinkt (nicht über eine Weiterleitung oder JavaScript)
+- die zu erfassenden Dateien öffnen sich in einem neuen Fenster
 
 Installation
 ------------
 
-1. wm_autotrack.min.js inkludieren
-2. Wiredminds tracking code einbauen
-3. Autotrack starten
+Schritt 1: Vergewissern Sie sich, dass der wiredminds Tracking Code verbaut ist
+Schritt 2: Inkludieren Sie die Datei wm_autotrack.min.js
+Schritt 3: Starten Sie Autotrack
 
-**Bower install**
+**a. Installation über Bower**
 
 .. code-block:: bash
 
@@ -40,7 +37,7 @@ Installation
   <script>
       var wmAutoTrackObj = new wmAutoTrack({
             // add options here
-            trackDownlodsWithPath: false
+            trackDownloadsWithPath: false
       });
 
       // no not modify below this line
@@ -52,7 +49,26 @@ Installation
       }
   </script>
 
-**Manuell:**
+*Default Einstellungen*
+
+- trackDownloadsWithPath: true
+- pathPageDownloads: 'DL|'
+- pathEventDownloads: 'DL/'
+- milestoneDownloads: 'Downloads'
+- trackExtLinksAsEvents: false
+- trackExtlinksWithPath: false
+- trackExtlinksFullUrl: false
+- pathPageExtlinks: 'ExtLink|'
+- pathEventExtlinks: 'ExtLinks/'
+- milestoneExtlinks: ''
+- trackMailtoWithPath: false
+- trackMailLinkAsEvents: false
+- pathPageMailto: 'MailTo|'
+- pathEventMailto: 'MailTo/'
+- milestoneMailto: ''
+- debug: false
+
+**b. Manuelle Installation**
 
 `wm_autotrack.min.js <https://raw.githubusercontent.com/wiredminds/autotrack/master/dist/wm_autotrack.min.js>`_
 Datei auf dem Webserver hochladen und im auf jede Seite einbinden.
@@ -64,7 +80,7 @@ Datei auf dem Webserver hochladen und im auf jede Seite einbinden.
     <script>
         var wmAutoTrackObj = new wmAutoTrack({
               // add options here
-              trackDownlodsWithPath: false
+              trackDownloadsWithPath: false
         });
 
         // no not modify below this line
@@ -82,13 +98,13 @@ Optionen
 .. code-block:: javascript
 
     // every download name will include the path to it, defaults is "Downloads|"
-    trackDownlodsWithPath: false,
+    trackDownloadsWithPath: false,
 
     // wm_page_name prefix
-    pathPageDownloads: 'DL|',
+    pathPageDownloads: 'DL',
 
     // event prefix
-    pathEventDownloads: 'DL/',
+    pathEventDownloads: 'DL',
 
     // milestone name: if empty string no milestone will be set
     milestoneDownloads: 'Downloads',
@@ -104,10 +120,10 @@ Optionen
     trackExtlinksFullUrl: false,
 
     // wm_page_name prefix
-    pathPageExtlinks: 'ExtLink|',
+    pathPageExtlinks: 'ExtLink',
 
     // event prefix
-    pathEventExtlinks: 'ExtLinks/',
+    pathEventExtlinks: 'ExtLinks',
 
     // milestone name: if empty, no milestone will be set
     milestoneExtlinks: '',
@@ -119,13 +135,13 @@ Optionen
     trackMailLinkAsEvents: false,
 
     // wm_page_name prefix
-    pathPageMailto: 'MailTo|',
+    pathPageMailto: 'MailTo',
 
     // events prefix
-    pathEventMailto: 'MailTo/',
+    pathEventMailto: 'MailTo',
 
     // milestone name: if empty string no milestone will be set
-    milestoneMailto: '',ö
+    milestoneMailto: '',
 
     // toggle console debug
     debug: false
@@ -133,10 +149,13 @@ Optionen
 Meilensteine
 ------------
 
-Es werden automatisch folgende Meilensteine gesetzt (kann in de JS Datei angepasst werden):
+Das Download Tracking Script beinhaltet auch das automatische Setzen von Meilensteinen,
+die das ausführen des Script in LeadLab Sales dokumentieren.
 
-- „Downloads“ - wenn eine Datei/Dokument angeklickt wird
-- „E-Mail Angeklickt“ - wenn eine E-Mail Adresse angeklickt wird
+Es werden folgende Meilensteine gesetzt:
+
+- beim Klick auf eine Datei oder ein Dokument wird der Meilenstein „Downloads“ gesetzt
+- beim Klick auf eine E-Mail Adresse wird der Meilenstein „MailTo“ gesetzt
 
 
 Bitte testen Sie abschließend mit unterschiedlichen Browsern, ob das Tracking tatsächlich überall funktioniert.

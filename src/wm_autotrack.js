@@ -6,36 +6,36 @@ var wmAutoTrack = function(options) {
   this.trackDownlodsAsEvents = options.trackDownlodsAsEvents || false;
 
   // every download name will include the path to it, defaults is "Downloads|"
-  this.trackDownlodsWithPath = options.trackDownlodsWithPath || false;
+  this.trackDownloadsWithPath = options.trackDownloadsWithPath || false;
 
   // wm_page_name prefix
-  this.pathPageDownloads = options.pathPageDownloads || 'DL|';
+  this.pathPageDownloads = options.pathPageDownloads || 'Download';
 
   // event prefix
-  this.pathEventDownloads = options.pathEventDownloads || 'DL/';
+  this.pathEventDownloads = options.pathEventDownloads || 'Download';
 
   // milestone name: if empty string no milestone will be set
-  this.milestoneDownloads = options.milestoneDownloads || 'Downloads';
+  this.milestoneDownloads = options.milestoneDownloads || 'Download';
 
   /** external link tracking configuration **/
   // track external links as events (false to be tracked as pages)
-  this.trackExtLinksAsEvents = options.trackExtLinksAsEvents || false;
+  this.trackExternalLinksAsEvents = options.trackExternalLinksAsEvents || false;
 
   // true for every external link to include the path to it, defaut is "ExtLink|"
-  this.trackExtlinksWithPath = options.trackExtlinksWithPath || false;
+  this.trackExternalLinksWithPath = options.trackExternalLinksWithPath || false;
 
   // true for every external link to include the full url instead of only the domain.
-  this.trackExtlinksFullUrl = options.trackExtlinksFullUrl || false;
+  this.trackExternalLinksFullUrl = options.trackExternalLinksFullUrl || false;
 
   // wm_page_name prefix
-  this.pathPageExtlinks = options.pathPageExtlinks || 'ExtLink|';
+  this.pathPageExternalLinks = options.pathPageExternalLinks || 'ExternalLink';
 
   // event prefix
-  this.pathEventExtlinks = options.pathEventExtlinks || 'ExtLinks/';
+  this.pathEventExternalLinks = options.pathEventExternalLinks || 'ExternalLink';
 
   // milestone name: if empty, no milestone will be set
-  this.milestoneExtlinks = options.milestoneExtlinks || '';
 
+  this.milestoneExternalLinks = options.milestoneExternalLinks || '';
   /** mailto link tracking configuration **/
   // true for every external link to include the path to it, default path is "MailTo|"
   this.trackMailtoWithPath = options.trackMailtoWithPath || false;
@@ -44,10 +44,10 @@ var wmAutoTrack = function(options) {
   this.trackMailLinkAsEvents = options.trackMailLinkAsEvents || false;
 
   // wm_page_name prefix
-  this.pathPageMailto = options.pathPageMailto || 'MailTo|';
+  this.pathPageMailto = options.pathPageMailto || 'mailto';
 
   // events prefix
-  this.pathEventMailto = options.pathEventMailto || 'MailTo/';
+  this.pathEventMailto = options.pathEventMailto || 'mailto';
 
   // milestone name: if empty string no milestone will be set
   this.milestoneMailto = options.milestoneMailto || '';
@@ -55,10 +55,28 @@ var wmAutoTrack = function(options) {
   // toggle console debug
   this.debug = options.debug || false;
 
+  // wm_page_name separator
+  this._pageSeparator = '|';
+
+  // wm_group_name seaparator
+  this._groupSeparator = '/';
+
+  // wm_event seaparator
+  this._eventSeparator = '/';
+
+  // wm_milestone separator
+  this._milestoneSeparator = '/';
+
+  this._extensions = /\.(pdf|txt|doc|docx|xls|xlsx|ppt|pptx|js|vsd|vxd|css|rar|zip|tar|gz|dmg|exe|wma|mov|avi|wmv|mp3|mp4|vcf)$/i;
+
   // Revert the values changed by autotrack script to its original ones.
   // NOTE: Requires the wiredminds tracking object to be already loaded, otherwise nothing will be reverted!
   // If disabled, it can lead to unforeseen results in tracked strings.
   this.revertChangedValues = options.revertChangedValues || true;
+
+  this._mailto = 'mailto';
+  this._download = 'download';
+  this._extlink = 'extlink';
 
   // Save the scope
   var scope = this;
@@ -69,80 +87,136 @@ var wmAutoTrack = function(options) {
   this.init = function() {
 
     var links = document.getElementsByTagName('a');
-    var linkPathname = '';
     var sourceURL = window.location.hostname;
 
     // For each link in the page, add corresponding tracking event
     for (var i = 0; i < links.length; i++) {
-      var currentLink = links[i];
+      var link = links[i];
       // add tracking
       try {
-        var linkURL = currentLink.href;
-        var currentDestinURL = currentLink.hostname;
-        linkPathname = currentLink.pathname;
-
+        var currentDestinURL = link.hostname;
         // check each type of link: 1. mailTo
-        if (linkURL.match(/^mailto:/i)) {
-          scope.logme('Tracking ' + i + ' ' + linkURL + ' as MailTo');
-          var tmpEmail = linkURL.split('mailto:');
-          var eMail = tmpEmail[1]; // remove 'mailto:' from the string and leave only the e-mail address
-          var wmElemType = 'mailto';
-
-          // Add an event listener to the current link with an anonymous function as handler to keep the current
-          // params captured in a closure.
-          scope.addListener(currentLink, function(wmElemType, eMail) {
-            // Return the function to be called on event
-            return function() {
-              scope.logme('A MAILTO was clicked!');
-              scope.wiredmindsTrack(wmElemType, eMail);
-            };
-          }(wmElemType, eMail));
-
+        if (scope.isMailTo(link) === true) {
+          // mailto
+          scope.addMailToListener(link);
         } else if (scope.compareDomains(currentDestinURL, sourceURL)) {
-          // check each type of link: 2. Document
-          if (linkPathname.match(/\.(pdf|txt|doc|docx|xls|xlsx|ppt|pptx|js|vsd|vxd|css|rar|zip|tar|gz|dmg|exe|wma|mov|avi|wmv|mp3|mp4|vcf)$/i)) {
-            scope.logme('Tracking ' + i + ' ' + linkURL + ' as DOC');
-            // Track an internal link (a file)
-            var filePath = '/' + linkPathname;
-            var fileDetails = filePath.split('/');
-            var fileFullname = fileDetails[(fileDetails.length - 1)];
-            var wmElemType = 'download';
-            // Add an event listener to the current link with an anonymous function as handler to keep the current
-            // params captured in a closure.
-            scope.addListener(currentLink, function(wmElemType, fileFullname) {
-              //Return the function to be called on event
-              return function() {
-                scope.logme('A FILE was clicked!');
-                scope.wiredmindsTrack(wmElemType, fileFullname);
-              };
-            }(wmElemType, fileFullname));
-          }
-
+          // downloads
+          scope.addDownloadListener(link);
         } else {
-          // check each type of link: 3. ExernalLink
-          scope.logme('Tracking ' + i + ' ' + linkURL + ' as EXTLINK');
-          // Track an external link
-          var fileFullname = currentDestinURL;
-          // Use the full URL
-          if (scope.trackExtlinksFullUrl === true) {
-            fileFullname = linkURL;
-          }
-          var wmElemType = 'extlink';
-
-          // Add an event listener to the current link with an anonymous function as handler to keep the current
-          // params captured in a closure.
-          scope.addListener(currentLink, function(wmElemType, fileFullname) {
-            // Return the function to be called on event
-            return function() {
-              scope.logme('An ExtLink was clicked!');
-              scope.wiredmindsTrack(wmElemType, fileFullname);
-            };
-          }(wmElemType, fileFullname));
+          // external links
+          scope.addExternalLinkListener(link);
         }
       } catch (err) {
-        scope.logme('Tracking error: ' + err);
+        scope.writeLog('Tracking error: ' + err);
       }
     }
+  };
+
+  /**
+   * Check if mailto
+   *
+   * @param {Object} link
+   */
+  this.isMailTo = function(link) {
+    return (link.href.match(/^mailto:/i) !== null);
+  };
+
+  /**
+   * @param {Object} currentLink
+   */
+  this.addMailToListener = function(currentLink) {
+    var linkURL = currentLink.href;
+    scope.writeLog('Tracking ' + linkURL + ' as MailTo');
+
+    var tmpEmail = linkURL.split('mailto:');
+    var eMail = tmpEmail[1]; // remove 'mailto:' from the string and leave only the e-mail address
+    var wmElemType = 'mailto';
+
+    // Add an event listener to the current link with an anonymous function as handler to keep the current
+    // params captured in a closure.
+    scope.addListener(currentLink, function(wmElemType, eMail) {
+      // Return the function to be called on event
+      return function() {
+        scope.writeLog('mailto click');
+        //scope.wiredmindsTrack(wmElemType, eMail);
+        scope.wiredmindsTrack(function() {
+          scope.wiredmindsTrackAction(
+            scope.trackMailLinkAsEvents,
+            scope.trackMailtoWithPath,
+            scope.pathPageMailto,
+            scope.pathEventMailto,
+            scope.milestoneMailto,
+            eMail);
+        });
+      };
+    }(wmElemType, eMail));
+  };
+
+  /**
+   * @param {Object} currentLink
+   */
+  this.addDownloadListener = function(currentLink) {
+
+    var linkURL = currentLink.href;
+    var linkPathname = currentLink.pathname;
+
+    if (linkPathname.match(this._extensions)) {
+      scope.writeLog('Tracking ' + linkURL + ' as DOC');
+      // Track an internal link (a file)
+      var filePath = '/' + linkPathname;
+      var fileDetails = filePath.split('/');
+      var fileFullname = fileDetails[(fileDetails.length - 1)];
+      var wmElemType = 'download';
+      // Add an event listener to the current link with an anonymous function as handler to keep the current
+      // params captured in a closure.
+      scope.addListener(currentLink, function(wmElemType, fileFullname) {
+        //Return the function to be called on event
+        return function() {
+          scope.writeLog('file click');
+          scope.wiredmindsTrackAction(
+            scope.trackDownlodsAsEvents,
+            scope.trackDownloadsWithPath,
+            scope.pathPageDownloads,
+            scope.pathEventDownloads,
+            scope.milestoneDownloads,
+            fileFullname);
+        };
+      }(wmElemType, fileFullname));
+    }
+  };
+
+  /**
+   * @param {string} currentLink
+   */
+  this.addExternalLinkListener = function(currentLink) {
+    var linkURL = currentLink.href;
+    var currentDestinURL = currentLink.hostname;
+    // check each type of link: 3. ExernalLink
+    this.writeLog('Tracking ' + linkURL + ' as EXTLINK');
+    // Track an external link
+    var fileFullname = currentDestinURL;
+    // Use the full URL
+    if (scope.trackExternalLinksFullUrl === true) {
+      fileFullname = linkURL;
+    }
+    var wmElemType = 'extlink';
+
+    // Add an event listener to the current link with an anonymous function as handler to keep the current
+    // params captured in a closure.
+    scope.addListener(currentLink, function(wmElemType, fileFullname) {
+      // Return the function to be called on event
+      return function() {
+        scope.writeLog('external link click');
+        //scope.wiredmindsTrack(wmElemType, fileFullname);
+        scope.wiredmindsTrackAction(
+          scope.trackExternalLinksAsEvents,
+          scope.trackExternalLinksWithPath,
+          scope.pathPageExternalLinks,
+          scope.pathEventExternalLinks,
+          scope.milestoneExternalLinks,
+          fileFullname);
+      };
+    }(wmElemType, fileFullname));
   };
 
   /**
@@ -162,10 +236,9 @@ var wmAutoTrack = function(options) {
   /**
    * Reqister the tracking request
    *
-   * @param {string} elementType
-   * @param {string} eventname
+   * @param {fuction} callbackFn
    */
-  this.wiredmindsTrack = function(elementType, eventname) {
+  this.wiredmindsTrack = function(callbackFn) {
 
     // If wiredminds is not defined, just return
     if (typeof wiredminds == 'undefined') {
@@ -180,79 +253,54 @@ var wmAutoTrack = function(options) {
           var origPageName = wiredminds.getTrackParam('wm_page_name');
           var origMilestone = wiredminds.getTrackParam('wm_milestone');
         } else {
-          scope.logme('Unable to fetch original values for reset, disabling revert.');
+          scope.writeLog('Unable to fetch original values for reset, disabling revert.');
           scope.revertChangedValues = false;
         }
       } catch (ex) {
-        scope.logme('Unable to fetch original values for reset, disabling revert.');
+        scope.writeLog('Unable to fetch original values for reset, disabling revert.');
         scope.revertChangedValues = false;
       }
     }
 
-    //Track Downloads
-    if (elementType == 'download') {
-      if (scope.trackDownlodsAsEvents) {
-        wiredminds.push(['trackEvent', scope.pathEventDownloads + eventname]);
-      } else {
-        if (scope.trackDownlodsWithPath) {
-          if (scope.milestoneDownloads !== '') {
-            wiredminds.push(['setTrackParam', 'wm_milestone', scope.milestoneDownloads]);
-          }
-          wiredminds.push(['count', eventname]);
-        } else {
-          wiredminds.push(['setTrackParam', 'wm_page_name', scope.pathPageDownloads + eventname]);
-          if (scope.milestoneDownloads !== '') {
-            wiredminds.push(['setTrackParam', 'wm_milestone', scope.milestoneDownloads]);
-          }
-          wiredminds.push(['count']);
-        }
-      }
-    }
-    //Track External Links
-    if (elementType == 'extlink') {
-      if (scope.trackExtLinksAsEvents) {
-        wiredminds.push(['trackEvent', scope.pathEventExtlinks + eventname]);
-
-      } else {
-        if (scope.trackExtlinksWithPath) {
-          if (scope.milestoneExtlinks !== '') {
-            wiredminds.push(['setTrackParam', 'wm_milestone', scope.milestoneExtlinks]);
-          }
-          wiredminds.push(['count', eventname]);
-        } else {
-          wiredminds.push(['setTrackParam', 'wm_page_name', scope.pathPageExtlinks + eventname]);
-          if (scope.milestoneExtlinks !== '') {
-            wiredminds.push(['setTrackParam', 'wm_milestone', scope.milestoneExtlinks]);
-          }
-          wiredminds.push(['count']);
-        }
-      }
-    }
-    //Track Mailtos
-    if (elementType == 'mailto') {
-      if (scope.trackMailLinkAsEvents) {
-        wiredminds.push(['trackEvent', scope.pathEventMailto + eventname]);
-
-      } else {
-        if (scope.trackMailtoWithPath) {
-          if (scope.milestoneMailto !== '') {
-            wiredminds.push(['setTrackParam', 'wm_milestone', scope.milestoneMailto]);
-          }
-          wiredminds.push(['count', eventname]);
-        } else {
-          wiredminds.push(['setTrackParam', 'wm_page_name', scope.pathPageMailto + eventname]);
-          if (scope.milestoneMailto !== '') {
-            wiredminds.push(['setTrackParam', 'wm_milestone', scope.milestoneMailto]);
-          }
-          wiredminds.push(['count']);
-        }
-      }
-    }
+    callbackFn();
 
     // Reset to the original values
     if (scope.revertChangedValues === true) {
       wiredminds.push(['setTrackParam', 'wm_page_name', origPageName]);
       wiredminds.push(['setTrackParam', 'wm_milestone', origMilestone]);
+    }
+  };
+
+  /**
+   * Do count
+   *
+   * @param {boolean} asEvent Track as event
+   * @param {boolean} trackPath Track with path
+   * @param {string} prefixPage Page prefix
+   * @param {string} prefixEvent Event prefix
+   * @param {string} milestone Milestone
+   * @param {string} value tracked value
+   */
+  this.wiredmindsTrackAction = function(asEvent, trackPath, prefixPage, prefixEvent, milestone, value) {
+
+    // If wiredminds is not defined, just return
+    if (asEvent === true) {
+      var eventVal = [prefixEvent, value].join(scope._eventSeparator);
+      wiredminds.push(['trackEvent', eventVal]);
+    } else {
+      // track milestone
+      if (milestone !== '') {
+        wiredminds.push(['setTrackParam', 'wm_milestone', milestone]);
+      }
+
+      if (trackPath === true) {
+        // track full page path ans use type as suffix
+        wiredminds.push(['count', value]);
+      } else {
+        var pageName = [prefixPage, value].join(scope._pageSeparator);
+        wiredminds.push(['setTrackParam', 'wm_page_name', pageName]);
+        wiredminds.push(['count']);
+      }
     }
   };
 
@@ -284,11 +332,11 @@ var wmAutoTrack = function(options) {
   /**
    * Do a console.log if in debug mode and available
    *
-   * @param {string} myString
+   * @param {string} msg
    */
-  this.logme = function(myString) {
-    if ((scope.debug == true) && (typeof (console) !== 'undefined') && (console !== null)) {
-      console.log(myString);
+  this.writeLog = function(msg) {
+    if ((scope.debug == true) && console) {
+      console.log(msg);
     }
   };
 };
