@@ -20,9 +20,9 @@ Durch den Einsatz des Scripts wird vermieden, dass jedes der beschriebenen Eleme
 Installation
 ------------
 
-Schritt 1: Vergewissern Sie sich, dass der wiredminds Tracking Code verbaut ist
-Schritt 2: Inkludieren Sie die Datei wm_autotrack.min.js
-Schritt 3: Starten Sie Autotrack
+* Schritt 1: Vergewissern Sie sich, dass der wiredminds Tracking Code verbaut ist
+* Schritt 2: Inkludieren Sie die Datei wm_autotrack.min.js
+* Schritt 3: Starten Sie Autotrack
 
 **a. Installation über Bower**
 
@@ -36,12 +36,11 @@ Schritt 3: Starten Sie Autotrack
   <script type="text/javascript" src="bower_components/wm_autotrack/dist/wm_autotrack.min.js"></script>
   <script>
       var wmAutoTrackObj = new wmAutoTrack({
-            // add options here
+            /* Options */
             trackDownloadsWithPath: false
       });
 
-      // no not modify below this line
-      // init autotrack
+      /* do not change below this line */
       if (window.addEventListener) {
           window.addEventListener('load', wmAutoTrackObj.init, false);
       } else if (window.attachEvent) {
@@ -64,7 +63,7 @@ Datei auf dem Webserver hochladen und im auf jede Seite einbinden.
               trackDownloadsWithPath: false
         });
 
-        /* no not change below this line */
+        /* do not change below this line */
         if (window.addEventListener) {
             window.addEventListener('load', wmAutoTrackObj.init, false);
         } else if (window.attachEvent) {
@@ -118,6 +117,9 @@ Es werden folgende Meilensteine gesetzt:
 - beim Klick auf eine Datei oder ein Dokument wird der Meilenstein „Downloads“ gesetzt
 - beim Klick auf eine E-Mail Adresse wird der Meilenstein „MailTo“ gesetzt
 
+
+Disclaimer
+----------
 
 Bitte testen Sie abschließend mit unterschiedlichen Browsern, ob das Tracking tatsächlich überall funktioniert.
 
