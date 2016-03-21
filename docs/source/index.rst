@@ -49,25 +49,6 @@ Schritt 3: Starten Sie Autotrack
       }
   </script>
 
-*Default Einstellungen*
-
-- trackDownloadsWithPath: true
-- pathPageDownloads: 'DL|'
-- pathEventDownloads: 'DL/'
-- milestoneDownloads: 'Downloads'
-- trackExtLinksAsEvents: false
-- trackExtlinksWithPath: false
-- trackExtlinksFullUrl: false
-- pathPageExtlinks: 'ExtLink|'
-- pathEventExtlinks: 'ExtLinks/'
-- milestoneExtlinks: ''
-- trackMailtoWithPath: false
-- trackMailLinkAsEvents: false
-- pathPageMailto: 'MailTo|'
-- pathEventMailto: 'MailTo/'
-- milestoneMailto: ''
-- debug: false
-
 **b. Manuelle Installation**
 
 `wm_autotrack.min.js <https://raw.githubusercontent.com/wiredminds/autotrack/master/dist/wm_autotrack.min.js>`_
@@ -79,12 +60,11 @@ Datei auf dem Webserver hochladen und im auf jede Seite einbinden.
     <script type="text/javascript" src="wm_autotrack.min.js"></script>
     <script>
         var wmAutoTrackObj = new wmAutoTrack({
-              // add options here
+              /* Options */
               trackDownloadsWithPath: false
         });
 
-        // no not modify below this line
-        // init autotrack
+        /* no not change below this line */
         if (window.addEventListener) {
             window.addEventListener('load', wmAutoTrackObj.init, false);
         } else if (window.attachEvent) {
@@ -92,59 +72,40 @@ Datei auf dem Webserver hochladen und im auf jede Seite einbinden.
         }
     </script>
 
-Optionen
---------
 
-.. code-block:: javascript
+**Optionen**
 
-    // every download name will include the path to it, defaults is "Downloads|"
-    trackDownloadsWithPath: false,
+    *File Downloads*
 
-    // wm_page_name prefix
-    pathPageDownloads: 'DL',
+    - ``trackDownloadsWithPath: true``
+    - ``pathPageDownloads: "DL"``
+    - ``pathEventDownloads: "DL"``
+    - ``milestoneDownloads: "Downloads"``
 
-    // event prefix
-    pathEventDownloads: 'DL',
+    *Externe Links*
 
-    // milestone name: if empty string no milestone will be set
-    milestoneDownloads: 'Downloads',
+    - ``trackExternalLinksAsEvents: false``
+    - ``trackExternalLinksWithPath: false``
+    - ``trackExternalLinksFullUrl: false``
+    - ``pathPageExternalLinks: "ExternalLink"``
+    - ``pathEventExternalLinks: "ExternalLink"``
+    - ``milestoneExternalLinks: ""``
 
-    /** external link tracking configuration **/
-    // track external links as events (false to be tracked as pages)
-    trackExtLinksAsEvents: false,
+    *MailTo*
 
-    // true for every external link to include the path to it, defaut is "ExtLink|"
-    trackExtlinksWithPath: false,
+    - ``trackMailtoWithPath: false``
+    - ``trackMailLinkAsEvents: false``
+    - ``pathPageMailto: "MailTo"``
+    - ``pathEventMailto: "MailTo"``
+    - ``milestoneMailto: ""``
 
-    // true for every external link to include the full url instead of only the domain.
-    trackExtlinksFullUrl: false,
+    *Debug*
 
-    // wm_page_name prefix
-    pathPageExtlinks: 'ExtLink',
+    - ``debug: false``
 
-    // event prefix
-    pathEventExtlinks: 'ExtLinks',
-
-    // milestone name: if empty, no milestone will be set
-    milestoneExtlinks: '',
-
-    // true for every external link to include the path to it, default path is "MailTo|"
-    trackMailtoWithPath: false,
-
-    // track mailto links as events, if false, they will be tracked as pages
-    trackMailLinkAsEvents: false,
-
-    // wm_page_name prefix
-    pathPageMailto: 'MailTo',
-
-    // events prefix
-    pathEventMailto: 'MailTo',
-
-    // milestone name: if empty string no milestone will be set
-    milestoneMailto: '',
-
-    // toggle console debug
-    debug: false
+Beispiele
+---------
+`Autotrack einbauen <../../../examples/index.html>`_
 
 Meilensteine
 ------------

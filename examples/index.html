@@ -9,7 +9,7 @@ and open the template in the editor.
         <title>Autotrack example</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type="text/javascript" src="../src/wm_autotrack.js"></script>
+        <script type="text/javascript" src="../dist/wm_autotrack.min.js"></script>
     </head>
     <body>
         <div>Autorack demo page</div>
@@ -60,8 +60,7 @@ and open the template in the editor.
                   trackDownloadsWithPath: false,
                   trackMailLinkAsEvents: true,
                   //trackMailtoWithPath: true,
-                  milestoneMailto: "suchmilestone",
-                  milestoneMailto: "suchmilestone",
+                  milestoneMailto: "example_milestone_on_mailto_click",
                   debug: true
             });
             if (window.addEventListener) {
