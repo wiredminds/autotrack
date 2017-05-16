@@ -1,4 +1,5 @@
-Javascript for automatic file download link tracking using wiredminds.
+Javascript for automatic file download link tracking using LeadLab (v6.x) by wiredminds.
+
 
 This is a development preview, do not use in production!
 
