@@ -283,6 +283,11 @@ var wmAutoTrack = function(options) {
    */
   this.wiredmindsTrackAction = function(asEvent, trackPath, prefixPage, prefixEvent, milestone, value) {
 
+    // Do not track empty values
+    if (!value) {
+      return;
+    }
+
     // If wiredminds is not defined, just return
     if (asEvent === true) {
       var eventVal = [prefixEvent, value].join(scope._eventSeparator);
