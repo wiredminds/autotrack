@@ -9,7 +9,7 @@ and open the template in the editor.
         <title>Autotrack example</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type="text/javascript" src="../dist/wm_autotrack.min.js"></script>
+        <script type="text/javascript" src="../src/wm_autotrack.js"></script>
     </head>
     <body>
         <div>Autorack demo page</div>
@@ -39,7 +39,7 @@ and open the template in the editor.
               var wm = document.createElement("script");
               wm.type = "text/javascript";
               wm.async = true;
-              wm.src = "http://wm.wiredminds.de/track/count.js";
+              wm.src = "http://localhost:8290/static/count.js";
               var el = document.getElementsByTagName('script')[0];
               el.parentNode.insertBefore(wm, el);
             }
@@ -57,11 +57,7 @@ and open the template in the editor.
 
         <script>
             var wmAutoTrackObj = new wmAutoTrack({
-                  trackDownloadsWithPath: false,
-                  trackMailLinkAsEvents: true,
-                  //trackMailtoWithPath: true,
-                  milestoneMailto: "example_milestone_on_mailto_click",
-                  debug: true
+                  trackDownloadsWithPath: false
             });
             if (window.addEventListener) {
                 window.addEventListener('load', wmAutoTrackObj.init, false);
